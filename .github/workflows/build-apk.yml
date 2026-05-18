@@ -4,6 +4,9 @@ on:
   push:
     branches: [ main, master ]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -45,3 +48,17 @@ jobs:
       with:
         name: app-debug.apk
         path: android/app/build/outputs/apk/debug/app-debug.apk
+
+    - name: Create or Update GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: latest
+        name: "Latest Android Build"
+        body: |
+          Auto-generated build of the OmniStudy Tracker Android APK.
+          Download the `app-debug.apk` file below directly to your device!
+        files: android/app/build/outputs/apk/debug/app-debug.apk
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

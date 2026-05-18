@@ -33,9 +33,7 @@ const Settings = () => {
   };
 
   const handleDownloadAPK = () => {
-    // You can update this link to point directly to your GitHub Releases URL
-    // e.g., 'https://github.com/yourusername/OmniStudyTraker/releases/latest/download/app-debug.apk'
-    window.open('https://github.com/', '_blank');
+    window.open('https://github.com/harshit-singh-hs/OmniStudyTraker/releases/tag/latest', '_blank');
   };
 
   return (
