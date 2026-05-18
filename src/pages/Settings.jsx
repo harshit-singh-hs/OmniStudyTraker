@@ -54,10 +54,6 @@ const Settings = () => {
     setTimeout(() => setSyncStatus(''), 3000);
   };
 
-  const handleDownloadAPK = () => {
-    window.open('https://github.com/harshit-singh-hs/OmniStudyTraker/releases', '_blank');
-  };
-
   return (
     <div className="page-container fade-in">
       <header className="page-header">
@@ -159,9 +155,24 @@ const Settings = () => {
             Download the native Android APK to use OmniStudy Tracker on your phone. Changes will instantly sync to your web app.
           </p>
 
-          <button className="btn btn-primary" onClick={handleDownloadAPK} style={{ width: '100%', marginBottom: '1rem' }}>
+          <a 
+            href="https://github.com/harshit-singh-hs/OmniStudyTraker/releases" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="btn btn-primary" 
+            style={{ 
+              width: '100%', 
+              marginBottom: '1rem', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              gap: '0.5rem', 
+              textDecoration: 'none',
+              boxSizing: 'border-box'
+            }}
+          >
             <Download size={16} /> Download APK
-          </button>
+          </a>
         </div>
       </div>
     </div>
