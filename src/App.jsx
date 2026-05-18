@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
 
       {/* Bottom Nav for Mobile */}
       <nav className="mobile-nav">
-        {navItems.slice(0, 4).map((item) => (
+        {navItems.map((item) => (
           <Link 
             key={item.path} 
             to={item.path}

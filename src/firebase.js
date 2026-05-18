@@ -18,9 +18,9 @@ export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
 
 export const loginWithGoogle = async () => {
-  const isMobileOrCapacitor = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.Capacitor;
+  const isNativeCapacitor = window.Capacitor || (window.location.protocol === 'file:') || (window.location.hostname === 'localhost' && !window.location.port);
   
-  if (isMobileOrCapacitor) {
+  if (isNativeCapacitor) {
     try {
       await signInWithRedirect(auth, googleProvider);
       return { user: null, redirectTriggered: true, error: null };
