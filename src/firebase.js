@@ -1,5 +1,14 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut } from "firebase/auth";
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  signInWithRedirect, 
+  signOut,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile
+} from "firebase/auth";
 import { getFirestore, doc, setDoc, onSnapshot } from "firebase/firestore";
 
 
@@ -52,5 +61,24 @@ export const logout = async () => {
     await signOut(auth);
   } catch (error) {
     console.error("Error logging out:", error);
+  }
+};
+
+export const loginWithEmail = async (email, password) => {
+  try {
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    return { user: result.user, error: null };
+  } catch (error) {
+    return { user: null, error };
+  }
+};
+
+export const registerWithEmail = async (email, password, displayName) => {
+  try {
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(result.user, { displayName });
+    return { user: result.user, error: null };
+  } catch (error) {
+    return { user: null, error };
   }
 };
