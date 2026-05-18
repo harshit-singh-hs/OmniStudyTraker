@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut } from "firebase/auth";
 import { getFirestore, doc, setDoc, onSnapshot } from "firebase/firestore";
 
 
@@ -18,12 +18,32 @@ export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
 
 export const loginWithGoogle = async () => {
+  const isMobileOrCapacitor = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.Capacitor;
+  
+  if (isMobileOrCapacitor) {
+    try {
+      await signInWithRedirect(auth, googleProvider);
+      return { user: null, redirectTriggered: true, error: null };
+    } catch (error) {
+      console.error("Redirect login error:", error);
+      return { user: null, redirectTriggered: false, error };
+    }
+  }
+
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    return result.user;
+    return { user: result.user, redirectTriggered: false, error: null };
   } catch (error) {
-    console.error("Error logging in:", error);
-    return null;
+    console.error("Popup login error, trying redirect fallback:", error);
+    if (error.code === "auth/popup-blocked" || error.code === "auth/cancelled-popup-request") {
+      try {
+        await signInWithRedirect(auth, googleProvider);
+        return { user: null, redirectTriggered: true, error: null };
+      } catch (redirectError) {
+        return { user: null, redirectTriggered: false, error: redirectError };
+      }
+    }
+    return { user: null, redirectTriggered: false, error };
   }
 };
 

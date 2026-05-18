@@ -9,13 +9,21 @@ const Settings = () => {
 
   const handleLogin = async () => {
     setSyncStatus('Logging in...');
-    const resultUser = await loginWithGoogle();
+    const { user: resultUser, redirectTriggered, error } = await loginWithGoogle();
+    
     if (resultUser) {
       setSyncStatus(`Welcome, ${resultUser.displayName}!`);
+      setTimeout(() => setSyncStatus(''), 3000);
+    } else if (redirectTriggered) {
+      setSyncStatus('Redirecting to Google Sign-in...');
     } else {
-      setSyncStatus('Login failed or cancelled.');
+      if (error) {
+        setSyncStatus(`Login failed: ${error.code || error.message}`);
+      } else {
+        setSyncStatus('Login failed or cancelled.');
+      }
+      setTimeout(() => setSyncStatus(''), 15000); // 15 seconds to view error
     }
-    setTimeout(() => setSyncStatus(''), 3000);
   };
 
   const handleLogout = async () => {
